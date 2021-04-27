@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  fastmessages:
+    build: 
+      context: .
+      dockerfile: Dockerfile.test
+    ports: 
+      - "8000:8000"
+    networks:
+      - fastmessages_test_network
+    environment: 
+      REDIS_URI: "redis://redis/0?encoding=utf-8"
+  
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+    networks:
+      - fastmessages_test_network
+
+networks:
+  fastmessages_test_network:
+    driver: bridge
