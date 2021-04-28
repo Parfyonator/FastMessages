@@ -102,7 +102,6 @@ API has one endpoint for GET and POST requests.
     ```
 
 ## Run in environment (pip)
----
 
 Requirements:
 
@@ -136,7 +135,6 @@ pytest
 ```
 
 ## Run in Docker
----
 
 App:
 
