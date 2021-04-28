@@ -52,7 +52,7 @@ async def test_post(client):
 @pytest.mark.asyncio
 async def test_get_after_post(client):
     s = 'Some important message'
-    ttl = 20
+    ttl = 30
     timeout = 1
 
     await client.post(
@@ -66,8 +66,7 @@ async def test_get_after_post(client):
         }
     )
 
-    for i in range(10_000):
-        print(i)
+    for _ in range(10_000):
         res = await client.get('/messages/2', params={'timeout': timeout})
         data = res.json()
         assert res.status_code == 200
@@ -97,8 +96,7 @@ async def test_get_before_post(client):
     
     asyncio.create_task(helper_fn())
 
-    for i in range(100):
-        print(i)
+    for _ in range(100):
         res = await client.get('/messages/3', params={'timeout': timeout})
         data = res.json()
         assert res.status_code == 200
