@@ -16,15 +16,42 @@ API has one endpoint for GET and POST requests.
 
     `timeout=[integer]` (time to wait for message in seconds)
 
-  * **Success Response:**
+  * **Success Responses:**
 
-    **Code:** 200 <br>
-    **Body:** `{"message": <retrieved message>}`
+    **Code:** `200` <br>
+    **Body:** <br>
+    ```
+    {
+        "message": <retrieved message>
+    }
+    ```
 
-  * **Error Response:**
+  * **Error Responses:**
 
-    **Code:** 404 <br>
-    **Body:** `{"detail": "Message with given key not found."}`
+    **Code:** `404` <br>
+    **Body:** <br>
+    ```
+    {
+        "detail": "Message with given key not found."
+    }
+    ```
+  
+    **Code:** `422` <br>
+    **Body:** <br>
+    ```
+    {
+        "detail": [
+            {
+                "loc": [
+                    "query",
+                    "timeout"
+                ],
+                "msg": <error message>,
+                "type": <error type>
+            }
+        ]
+    }
+    ```
 
   `POST`
 
@@ -39,18 +66,43 @@ API has one endpoint for GET and POST requests.
     `value=[string]` (message) <br>
     `ttl=[integer]` (time to live in db in seconds)
 
-  * **Success Response:**
+  * **Success Responses:**
 
     **Code:** `200` <br>
-    **Body:** `null`
+    **Body:** <br>
+    ```
+    null
+    ```
 
-  * **Error Response:**
+  * **Error Responses:**
 
     **Code:** `409` <br>
-    **Body:** `{"detail": "Message with given key already exist."}`
+    **Body:** <br>
+    ```
+    {
+        "detail": "Message with given key already exist."
+    }
+    ```
 
+    **Code:** `422` <br>
+    **Body:** <br>
+    ```
+    {
+        "detail": [
+            {
+                "loc": [
+                    "body",
+                    "ttl"
+                ],
+                "msg": <error message>,
+                "type": <error type>
+            }
+        ]
+    }
+    ```
 
 ## Run in environment (pip)
+---
 
 Requirements:
 
@@ -77,13 +129,22 @@ Start app:
 python api.py
 ```
 
-## Run Application (Docker)
+Run tests:
+
+```
+pytest
+```
+
+## Run in Docker
+---
+
+App:
 
 ```
 docker-compose up
 ```
 
-## Run tests (Docker)
+Tests:
 
 ```
 docker-compose -f docker-compose.test.yml up

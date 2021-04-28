@@ -2,14 +2,20 @@ import asyncio
 import os
 
 from aioredis import create_redis_pool
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException, Query
+from pydantic import BaseModel, validator
 import uvicorn
 
 
 class Message(BaseModel):
     value: str
     ttl: int
+
+    @validator('ttl')
+    def ttl_must_be_non_negative_int(cls, v):
+        if not isinstance(v, int) or not v >= 0:
+            raise ValueError('TTL must be a non-negative integer.')
+        return v
 
 
 app = FastAPI(debug=False)
@@ -45,7 +51,7 @@ async def get_message_timeout(key: str):
 
 
 @app.get('/messages/{key}')
-async def get_message(key: str, timeout:int = 0):
+async def get_message(key: str, timeout:int = Query(0, title='Message ID', ge=0)):
     if timeout == 0:
         msg = await app.state.redis.get(key)
         if not msg:
